@@ -1,0 +1,130 @@
+---
+title: "Analysis RMD"
+author: "Yingqi Chen"
+date: "04/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+It is known that organized basketball is a game with 5 players for each team. There are three main positions on the court: guard, forward, and centre. More specifically, each of the 5 positions are known by point guard (PG), shooting guard (SG), small forward (SF), power forward (PF), and centre(C). Besides, during the organization, PG is represented by 1, SG is 2, SF is 3, PF is 4 and C is 5. 
+
+As PG position, the player should have fast speed and be good at driving and short-range. In the NBA, PGs are mostly between 1.78m to 1.98m with shoes. Good PGs increase team efficiency and generally have a high number of assists.
+
+Most SGs are prolific from the three-point range and long-mid range. They need to be patient and methodically circulate the three-point line linear with that of the ball. Besides, they need to be good at moving without the ball to create open looks for themselves. In the NBA, SGs usually range from 1.85m to 2.01m with shoes.
+
+The SF is considered to be the most versatile of the 5 players. All kinds of small forwards should have the ability to "get to the line" and draw fouls by aggressively attempting (post-up) plays, lay-ups, or slam dunks. 
+
+The PFs are often the team’s most powerful and dependent scorer, being able to score close to the basket while also being able to shoot mid-range jump shots from 10-15 feet from the bank. The PFs usually range from 2.01m to 2.13m.
+
+The centres are usually the tallest players on the floor. In the NBA, they are usually around 2.03m tall with shoes. 
+
+Different positions have different responsibilities, it is significant to find the most suitable player for each position. Meanwhile, our budget for player contracts next season is $118 million and the aim of this project is to find the most optimal team with 5 players which is suitable with our budget. It is of great significance since our team Chicago Bull is No.27 during last season. We need to use great statistical technology to find the most suitable players to get better results in the following seasons. 
+
+##Load required packages
+```{r packages, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(broom)
+library(Lahman)
+```
+
+
+## data source
+The raw data are get from last basketball game play season. These are the links to the sources:
+[The player statistics](https://www.basketball-reference.com/leagues/NBA_2019_totals.html)
+[The player salaries](https://hoopshype.com/salaries/),(https://hoopshype.com/salaries/)
+[The team payroll](https://www.basketball-reference.com/leagues/NBA_2019.html)
+[The team statistics1](https://www.basketball-reference.com/leagues/NBA_2019.html)
+[The team statistics2](https://www.basketball-reference.com/leagues/NBA_2019.html)
+
+#2.Reading and cleaning the raw data
+Reading data
+```{r read_data, message=FALSE}
+player_salaries <-read_csv("data/2018-19_nba_player-salaries.csv")
+player_statistics <-read_csv("data/2018-19_nba_player-statistics.csv")
+team_statistics_1 <-read_csv("data/2018-19_nba_team-statistics_1.csv")
+team_statistics_2 <-read_csv("data/2018-19_nba_team-statistics_2.csv")
+team_payroll <-read_csv("data/2019-20_nba_team-payroll.csv")
+
+```
+There are many variables in the data sources. 
+[The specific explanation of the variables is here](https://unicanberra.instructure.com/courses/9531/pages/data-description-reproducible-data-analysis-project)  
+
+#3. Exploratory analysis
+##Checking the data
+check the structure of the data file using `str()`
+```{r structure}
+str(player_statistics)
+```
+check the first 6 rows of the data file using `head()`
+```{r head}
+knitr::kable(head(player_statistics))
+```
+check the last 6 rows of the data file using`tail`
+```{r tail}
+tail(player_statistics)
+```
+check for missing values using:
+```{r na,echo=FALSE}
+sum(is.na(player_statistics))
+which(is.na(player_statistics), arr.ind = TRUE)
+```
+drop the rows with the missing values
+```{r drop_na}
+player_statistics2 <-drop_na(player_statistics)
+```
+##Firstly, we need to analyse the players at PG position
+```{r subsetting}
+df_PG <- player_statistics2[player_statistics2$Pos=="PG",]
+```
+There are 126 PG players here in total.
+
+Meanwhile, we want to take a look at the distribution of the age of the PG players
+```{r plot}
+ggplot(data = df_PG,aes(x = Age)) +
+  geom_histogram(mapping = aes(y = ..density..), colour = "black", fill = "dodgerblue", binwidth = 1)+
+  geom_density(alpha = 0.3 , fill = "black")
+```
+The distribution of the age of the PG players is right skewed and the mean is mode is around 27 since the PG players need both experience and speed. They cannot be too youg or old.
+We can compare the PGs' age distribution with all players' age distribution.
+all players' age distribution:
+```{r plot}
+ggplot(data = player_statistics2,aes(x = Age)) +
+  geom_histogram(mapping = aes(y = ..density..), colour = "black", fill = "pink",binwidth = 0.99)+
+  geom_density(alpha = 0.3, fill = "black")
+```
+
+From the introduction part, we know as a PG player,the ability of assistance is very important. Meanwhile, they are inside the 3 point line. so the 2P% is also an important variable as well as eFG%. So, we decide to create a new variable to evaluate the PG players: PGM = 60%^ASTM +20%^2P%M +20%^eFG%, we add the new variabes with mutate()
+
+
+
+
+
+
+
+##Secondly, we analyse the players at 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
